@@ -17,6 +17,8 @@ class App extends React.Component {
     this.onListItemClick = this.onListItemClick.bind(this);
     this.searchFunc = this.props.searchYouTube.bind(this);
     this.onVideoSearchClick = this.onVideoSearchClick.bind(this);
+    this.onSearchChange = this.onSearchChange.bind(this);
+    this.renderOnUpdate = this.renderOnUpdate.bind(this);
   }
   
   setData(data) {
@@ -32,7 +34,15 @@ class App extends React.Component {
       key: window.YOUTUBE_API_KEY,
       query: this.state.query,
       max: 5
-    }, this.setData.bind(this)); 
+    }, this.setData.bind(this));
+  }
+  
+  renderOnUpdate() {
+    this.searchFunc({
+      key: window.YOUTUBE_API_KEY,
+      query: this.state.query,
+      max: 5
+    }, this.setData.bind(this));
   }
   
   onListItemClick(video) {
@@ -43,22 +53,25 @@ class App extends React.Component {
     );
   }
   
-  onVideoSearchClick(value) {
+  onSearchChange(value) {
     this.setState (
       {
         query: value
       }
     );
-    this.componentDidMount();
+    this.renderOnUpdate();
+  }
+  
+  onVideoSearchClick() {
+    this.renderOnUpdate();
   }
   
   render() {
-    // console.log(this.state.videos);
     return (<div>
       <nav className="navbar">
         <div className="col-md-6 offset-md-3">
           <div>
-            <Search searchSubmit={this.onVideoSearchClick}/>
+            <Search searchChange={this.onSearchChange} searchSubmit={this.onVideoSearchClick}/>
           </div>
         </div>
       </nav>
