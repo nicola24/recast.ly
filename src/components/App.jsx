@@ -2,12 +2,38 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      videos: window.exampleVideoData,
-      video: window.exampleVideoData[0],
+      query: 'surfing',
+      videos: [], 
+      video: {
+        id: {
+          videoId: '0'
+        },
+        snippet: {
+          title: 'test title',
+          description: 'description'
+        }
+      },
     };
     this.onListItemClick = this.onListItemClick.bind(this);
+    this.searchFunc = this.props.searchYouTube.bind(this);
+    this.onVideoSearchClick = this.onVideoSearchClick.bind(this);
   }
   
+  setData(data) {
+    this.setState(
+      {
+        videos: data,
+        video: data[0]
+      });
+  }
+  
+  componentDidMount() {
+    this.searchFunc({
+      key: window.YOUTUBE_API_KEY,
+      query: this.state.query,
+      max: 5
+    }, this.setData.bind(this)); 
+  }
   
   onListItemClick(video) {
     this.setState (
@@ -17,13 +43,22 @@ class App extends React.Component {
     );
   }
   
+  onVideoSearchClick(value) {
+    this.setState (
+      {
+        query: value
+      }
+    );
+    this.componentDidMount();
+  }
+  
   render() {
     // console.log(this.state.videos);
     return (<div>
       <nav className="navbar">
         <div className="col-md-6 offset-md-3">
           <div>
-            <Search />
+            <Search searchSubmit={this.onVideoSearchClick}/>
           </div>
         </div>
       </nav>

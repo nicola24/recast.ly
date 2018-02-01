@@ -18,7 +18,6 @@ var searchYouTube = (options, callback) => { // need to add back callback as a p
       console.log('data successfully received');
     },
     error: function (data) {
-      // See: https://developer.mozilla.org/en-US/docs/Web/API/console.error
       console.error('"GET" request failed - review your message', data);
     }
   });
